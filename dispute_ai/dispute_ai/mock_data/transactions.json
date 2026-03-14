@@ -28,5 +28,105 @@
     "customer_id": "CUST-AS-77341",
     "merchant_id": "MERCH-URBAN-LADDER",
     "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-MYN-3341892",
+    "amount": 2799.00,
+    "timestamp": "2024-02-10T11:05:00+05:30",
+    "auth_method": "CARD OTP",
+    "device_id": "DEV-Android-Kiran-002",
+    "customer_id": "CUST-KP-11223",
+    "merchant_id": "MERCH-MYNTRA",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-ZP-6670123",
+    "amount": 999.00,
+    "timestamp": "2024-02-01T00:01:00+05:30",
+    "auth_method": "AUTO_DEBIT",
+    "device_id": "DEV-AUTO-RECURRING",
+    "customer_id": "CUST-MN-55678",
+    "merchant_id": "MERCH-ZOMATO-PRO",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-AMZ-9912034",
+    "amount": 14999.00,
+    "timestamp": "2024-02-05T16:20:00+05:30",
+    "auth_method": "CARD 3DS OTP",
+    "device_id": "DEV-Desktop-Vikram-009",
+    "customer_id": "CUST-VI-33891",
+    "merchant_id": "MERCH-AMAZON-IN",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-DELL-5523441",
+    "amount": 78500.00,
+    "timestamp": "2024-02-12T10:45:00+05:30",
+    "auth_method": "CARD 3DS OTP",
+    "device_id": "DEV-iPhone-Suresh-004",
+    "customer_id": "CUST-SK-22445",
+    "merchant_id": "MERCH-DELL-INDIA",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-MMT-7745009",
+    "amount": 23400.00,
+    "timestamp": "2024-01-15T08:30:00+05:30",
+    "auth_method": "NETBANKING OTP",
+    "device_id": "DEV-Desktop-Deepa-011",
+    "customer_id": "CUST-DK-88901",
+    "merchant_id": "MERCH-MAKEMYTRIP",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-LK-4480112",
+    "amount": 6500.00,
+    "timestamp": "2024-02-08T13:10:00+05:30",
+    "auth_method": "UPI PIN",
+    "device_id": "DEV-Android-Arjun-005",
+    "customer_id": "CUST-AM-66234",
+    "merchant_id": "MERCH-LENSKART",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-SWG-2298341",
+    "amount": 1840.00,
+    "timestamp": "2024-02-18T19:45:00+05:30",
+    "auth_method": "UPI PIN",
+    "device_id": "DEV-Android-Pooja-006",
+    "customer_id": "CUST-PV-44556",
+    "merchant_id": "MERCH-SWIGGY-INSTAMART",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-CRM-8834561",
+    "amount": 55000.00,
+    "timestamp": "2024-02-14T12:00:00+05:30",
+    "auth_method": "CARD 3DS OTP",
+    "device_id": "DEV-Desktop-Rohit-008",
+    "customer_id": "CUST-RS2-99012",
+    "merchant_id": "MERCH-CROMA",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-CT-3312908",
+    "amount": 18750.00,
+    "timestamp": "2024-01-20T14:00:00+05:30",
+    "auth_method": "CARD OTP",
+    "device_id": "DEV-iPhone-Sanjana-010",
+    "customer_id": "CUST-SG-77345",
+    "merchant_id": "MERCH-CLEARTRIP",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-BOAT-6601234",
+    "amount": 3299.00,
+    "timestamp": "2024-02-20T10:30:00+05:30",
+    "auth_method": "UPI PIN",
+    "device_id": "DEV-Android-Aditya-012",
+    "customer_id": "CUST-AR-12890",
+    "merchant_id": "MERCH-BOAT-LIFESTYLE",
+    "status": "SUCCESS"
   }
 ]

@@ -31,5 +31,115 @@
     "chargeback_code": "RBI-CB-4853",
     "filing_deadline": "2026-03-28",
     "customer_name": "Anjali Singh"
+  },
+  {
+    "case_id": "CB-2024-004",
+    "merchant_id": "MERCH-MYNTRA",
+    "transaction_id": "TXN-MYN-3341892",
+    "dispute_amount": 2799.00,
+    "currency": "INR",
+    "chargeback_reason": "Customer claims they were charged twice for the same order.",
+    "chargeback_code": "RBI-CB-4834",
+    "filing_deadline": "2026-04-10",
+    "customer_name": "Kiran Patel"
+  },
+  {
+    "case_id": "CB-2024-005",
+    "merchant_id": "MERCH-ZOMATO-PRO",
+    "transaction_id": "TXN-ZP-6670123",
+    "dispute_amount": 999.00,
+    "currency": "INR",
+    "chargeback_reason": "Customer cancelled subscription in January but was charged again in February.",
+    "chargeback_code": "RBI-CB-4841",
+    "filing_deadline": "2026-03-20",
+    "customer_name": "Meena Nair"
+  },
+  {
+    "case_id": "CB-2024-006",
+    "merchant_id": "MERCH-AMAZON-IN",
+    "transaction_id": "TXN-AMZ-9912034",
+    "dispute_amount": 14999.00,
+    "currency": "INR",
+    "chargeback_reason": "Customer claims the package was never received despite tracking showing delivered.",
+    "chargeback_code": "RBI-CB-4855",
+    "filing_deadline": "2026-04-05",
+    "customer_name": "Vikram Iyer"
+  },
+  {
+    "case_id": "CB-2024-007",
+    "merchant_id": "MERCH-DELL-INDIA",
+    "transaction_id": "TXN-DELL-5523441",
+    "dispute_amount": 78500.00,
+    "currency": "INR",
+    "chargeback_reason": "Cardholder denies authorizing this high-value laptop purchase.",
+    "chargeback_code": "RBI-CB-4853",
+    "filing_deadline": "2026-04-20",
+    "customer_name": "Suresh Kumar"
+  },
+  {
+    "case_id": "CB-2024-008",
+    "merchant_id": "MERCH-MAKEMYTRIP",
+    "transaction_id": "TXN-MMT-7745009",
+    "dispute_amount": 23400.00,
+    "currency": "INR",
+    "chargeback_reason": "Flight was cancelled by the airline. Customer requested refund from merchant but received no response in 30 days.",
+    "chargeback_code": "RBI-CB-4855",
+    "filing_deadline": "2026-03-18",
+    "customer_name": "Deepa Krishnan"
+  },
+  {
+    "case_id": "CB-2024-009",
+    "merchant_id": "MERCH-LENSKART",
+    "transaction_id": "TXN-LK-4480112",
+    "dispute_amount": 6500.00,
+    "currency": "INR",
+    "chargeback_reason": "Customer claims prescription glasses were made with wrong power and are unusable.",
+    "chargeback_code": "RBI-CB-4853",
+    "filing_deadline": "2026-04-25",
+    "customer_name": "Arjun Malhotra"
+  },
+  {
+    "case_id": "CB-2024-010",
+    "merchant_id": "MERCH-SWIGGY-INSTAMART",
+    "transaction_id": "TXN-SWG-2298341",
+    "dispute_amount": 1840.00,
+    "currency": "INR",
+    "chargeback_reason": "Half the grocery items were missing from the delivery bag. Merchant support unresponsive.",
+    "chargeback_code": "RBI-CB-4855",
+    "filing_deadline": "2026-03-25",
+    "customer_name": "Pooja Verma"
+  },
+  {
+    "case_id": "CB-2024-011",
+    "merchant_id": "MERCH-CROMA",
+    "transaction_id": "TXN-CRM-8834561",
+    "dispute_amount": 55000.00,
+    "currency": "INR",
+    "chargeback_reason": "Customer claims 55-inch TV was never delivered despite high-value purchase.",
+    "chargeback_code": "RBI-CB-4855",
+    "filing_deadline": "2026-04-12",
+    "customer_name": "Rohit Saxena"
+  },
+  {
+    "case_id": "CB-2024-012",
+    "merchant_id": "MERCH-CLEARTRIP",
+    "transaction_id": "TXN-CT-3312908",
+    "dispute_amount": 18750.00,
+    "currency": "INR",
+    "chargeback_reason": "Hotel denied the reservation on arrival. Customer had to book alternate accommodation at personal expense.",
+    "chargeback_code": "RBI-CB-4855",
+    "filing_deadline": "2026-03-16",
+    "customer_name": "Sanjana Gupta"
+  },
+  {
+    "case_id": "CB-2024-013",
+    "merchant_id": "MERCH-BOAT-LIFESTYLE",
+    "transaction_id": "TXN-BOAT-6601234",
+    "dispute_amount": 3299.00,
+    "currency": "INR",
+    "chargeback_reason": "Wireless earbuds stopped functioning within 7 days of delivery. Customer raising chargeback after warranty replacement was refused.",
+    "chargeback_code": "RBI-CB-4853",
+    "filing_deadline": "2026-04-08",
+    "customer_name": "Aditya Rao"
   }
 ]
