@@ -24,6 +24,12 @@ def _make_model_client() -> OpenAIChatCompletionClient:
         model=entry["model"],
         base_url=entry["base_url"],
         api_key=entry["api_key"],
+        model_info={
+            "vision": False,
+            "function_calling": True,
+            "json_output": True,
+            "family": "unknown",
+        },
     )
 
 
