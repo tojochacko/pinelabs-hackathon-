@@ -1,0 +1,32 @@
+[
+  {
+    "transaction_id": "TXN-UL-8821993",
+    "amount": 4500.00,
+    "timestamp": "2024-01-28T14:32:00+05:30",
+    "auth_method": "UPI PIN",
+    "device_id": "DEV-iPhone-Priya-001",
+    "customer_id": "CUST-PM-99142",
+    "merchant_id": "MERCH-URBAN-LADDER",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-UL-9934421",
+    "amount": 8200.00,
+    "timestamp": "2024-01-30T09:15:00+05:30",
+    "auth_method": "UPI PIN",
+    "device_id": "DEV-Samsung-Rahul-007",
+    "customer_id": "CUST-RS-44201",
+    "merchant_id": "MERCH-URBAN-LADDER",
+    "status": "SUCCESS"
+  },
+  {
+    "transaction_id": "TXN-UL-7712088",
+    "amount": 3100.00,
+    "timestamp": "2024-01-25T17:45:00+05:30",
+    "auth_method": "UPI PIN",
+    "device_id": "DEV-iPhone-Anjali-003",
+    "customer_id": "CUST-AS-77341",
+    "merchant_id": "MERCH-URBAN-LADDER",
+    "status": "SUCCESS"
+  }
+]

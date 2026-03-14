@@ -1,0 +1,40 @@
+[
+  {
+    "customer_id": "CUST-PM-99142",
+    "prior_disputes": [],
+    "events": [
+      {
+        "timestamp": "2024-01-31T15:00:00+05:30",
+        "event": "app_opened",
+        "detail": "Opened order tracking page post-delivery"
+      },
+      {
+        "timestamp": "2024-02-01T09:10:00+05:30",
+        "event": "review_submitted",
+        "detail": "Left 4-star product review on delivered item"
+      }
+    ]
+  },
+  {
+    "customer_id": "CUST-RS-44201",
+    "prior_disputes": ["CB-2023-089"],
+    "events": [
+      {
+        "timestamp": "2024-02-01T16:00:00+05:30",
+        "event": "app_opened",
+        "detail": "Browsed other products after delivery"
+      }
+    ]
+  },
+  {
+    "customer_id": "CUST-AS-77341",
+    "prior_disputes": [],
+    "events": [
+      {
+        "timestamp": "2024-01-28T11:00:00+05:30",
+        "event": "support_contacted",
+        "detail": "Customer emailed saying product colour was different from photos"
+      }
+    ]
+  }
+]

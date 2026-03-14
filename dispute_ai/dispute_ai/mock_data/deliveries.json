@@ -1,0 +1,26 @@
+[
+  {
+    "transaction_id": "TXN-UL-8821993",
+    "delivery_status": "DELIVERED",
+    "delivery_timestamp": "2024-01-31T11:15:00+05:30",
+    "delivery_proof": "OTP_CONFIRMED",
+    "tracking_id": "BLRDEL-99811",
+    "receiver_name": "Priya Mehta"
+  },
+  {
+    "transaction_id": "TXN-UL-9934421",
+    "delivery_status": "DELIVERED",
+    "delivery_timestamp": "2024-02-01T14:30:00+05:30",
+    "delivery_proof": "SIGNATURE_OBTAINED",
+    "tracking_id": "BLRDEL-44892",
+    "receiver_name": "Rahul Sharma"
+  },
+  {
+    "transaction_id": "TXN-UL-7712088",
+    "delivery_status": "DELIVERED",
+    "delivery_timestamp": "2024-01-27T10:00:00+05:30",
+    "delivery_proof": "OTP_CONFIRMED",
+    "tracking_id": "BLRDEL-77123",
+    "receiver_name": "Anjali Singh"
+  }
+]

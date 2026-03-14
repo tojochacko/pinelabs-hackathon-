@@ -1,0 +1,35 @@
+[
+  {
+    "case_id": "CB-2024-001",
+    "merchant_id": "MERCH-URBAN-LADDER",
+    "transaction_id": "TXN-UL-8821993",
+    "dispute_amount": 4500.00,
+    "currency": "INR",
+    "chargeback_reason": "Customer claims item was never delivered.",
+    "chargeback_code": "RBI-CB-4855",
+    "filing_deadline": "2026-04-30",
+    "customer_name": "Priya Mehta"
+  },
+  {
+    "case_id": "CB-2024-002",
+    "merchant_id": "MERCH-URBAN-LADDER",
+    "transaction_id": "TXN-UL-9934421",
+    "dispute_amount": 8200.00,
+    "currency": "INR",
+    "chargeback_reason": "Cardholder states this transaction was not authorized by them.",
+    "chargeback_code": "RBI-CB-4853",
+    "filing_deadline": "2026-04-15",
+    "customer_name": "Rahul Sharma"
+  },
+  {
+    "case_id": "CB-2024-003",
+    "merchant_id": "MERCH-URBAN-LADDER",
+    "transaction_id": "TXN-UL-7712088",
+    "dispute_amount": 3100.00,
+    "currency": "INR",
+    "chargeback_reason": "Item received but significantly not as described in the listing.",
+    "chargeback_code": "RBI-CB-4853",
+    "filing_deadline": "2026-03-28",
+    "customer_name": "Anjali Singh"
+  }
+]

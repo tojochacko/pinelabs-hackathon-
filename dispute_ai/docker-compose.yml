@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  dispute-ai:
+    build: .
+    env_file: .env
+    volumes:
+      - ./output:/app/output    # persist generated letters to host
+    network_mode: host          # allows container to reach Ollama on host at localhost:11434
+    # To run a different scenario:
+    # docker compose run dispute-ai CB-2024-003

@@ -1,0 +1,30 @@
+{
+  "name": "DisputeAI",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylance",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/app/.venv/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "editor.formatOnSave": false
+      }
+    }
+  },
+  "remoteEnv": {
+    "VIRTUAL_ENV": "/app/.venv",
+    "PATH": "/app/.venv/bin:${containerEnv:PATH}"
+  },
+  "postCreateCommand": "cp .env.example .env",
+  "mounts": [
+    "source=${localWorkspaceFolder}/output,target=/app/output,type=bind,consistency=cached"
+  ],
+  "runArgs": ["--network=host"]
+}
