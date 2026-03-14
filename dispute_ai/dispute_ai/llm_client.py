@@ -1,51 +1,91 @@
 import json
+import logging
 import os
 import time
+from urllib.parse import quote
+
+import httpx
 from dotenv import load_dotenv
 from openai import OpenAI
 
 load_dotenv()
 
+logger = logging.getLogger("dispute_ai.bedrock")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s — %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
 _PROVIDER = os.getenv("LLM_PROVIDER", "ollama").lower()
-
-
-def _make_client() -> OpenAI:
-    """
-    Build the appropriate OpenAI-compatible client based on LLM_PROVIDER.
-
-    - ollama:  Ollama's OpenAI-compatible local endpoint. No API key needed.
-    - bedrock: Amazon Bedrock via its OpenAI-compatible endpoint.
-               Requires AWS credentials in environment.
-
-    Both use the `openai` SDK — only the base_url and api_key differ.
-    AutoGen also uses this client under the hood via autogen-ext[openai].
-    """
-    if _PROVIDER == "ollama":
-        base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
-        return OpenAI(base_url=base_url, api_key="ollama")  # api_key value is ignored by Ollama
-
-    if _PROVIDER == "bedrock":
-        # Amazon Bedrock exposes an OpenAI-compatible endpoint.
-        # Credentials come from AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY env vars.
-        region = os.getenv("AWS_REGION", "ap-south-1")
-        return OpenAI(
-            base_url=f"https://bedrock-runtime.{region}.amazonaws.com/model",
-            api_key=os.getenv("AWS_ACCESS_KEY_ID", ""),
-        )
-
-    raise ValueError(f"Unknown LLM_PROVIDER: '{_PROVIDER}'. Must be 'ollama' or 'bedrock'.")
 
 
 def _get_model() -> str:
     if _PROVIDER == "ollama":
         return os.getenv("OLLAMA_MODEL", "gemma3")
     if _PROVIDER == "bedrock":
-        return os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-5-sonnet-20241022-v2:0")
+        return os.getenv("BEDROCK_MODEL", "anthropic.claude-3-5-sonnet-20241022-v2:0")
     return "gemma3"
 
 
-_client = _make_client()
 _model = _get_model()
+
+
+def _make_openai_client() -> OpenAI:
+    base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    return OpenAI(base_url=base_url, api_key="ollama")
+
+
+def _call_bedrock(system: str, user: str, max_tokens: int) -> str:
+    """
+    Call Bedrock Converse API using a Bearer token (Bedrock API key).
+    Uses httpx directly — boto3 does not support Bearer token auth.
+    """
+    region = os.getenv("AWS_REGION", "us-east-1")
+    token = os.getenv("AWS_BEARER_TOKEN_BEDROCK", "")
+    encoded_model = quote(_model, safe="")
+    url = f"https://bedrock-runtime.{region}.amazonaws.com/model/{encoded_model}/converse"
+
+    payload = {
+        "system": [{"text": system}],
+        "messages": [{"role": "user", "content": [{"text": user}]}],
+        "inferenceConfig": {"maxTokens": max_tokens, "temperature": 0.1},
+    }
+
+    logger.info("Bedrock request | model=%s | max_tokens=%d | system_len=%d | user_len=%d",
+                _model, max_tokens, len(system), len(user))
+
+    start = time.monotonic()
+    try:
+        response = httpx.post(
+            url,
+            json=payload,
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=120,
+        )
+        elapsed = time.monotonic() - start
+        response.raise_for_status()
+        body = response.json()
+        text = body["output"]["message"]["content"][0]["text"].strip()
+        usage = body.get("usage", {})
+        logger.info(
+            "Bedrock response | status=%d | latency=%.2fs | input_tokens=%s | output_tokens=%s | response_len=%d",
+            response.status_code,
+            elapsed,
+            usage.get("inputTokens", "?"),
+            usage.get("outputTokens", "?"),
+            len(text),
+        )
+        return text
+    except httpx.HTTPStatusError as e:
+        elapsed = time.monotonic() - start
+        logger.error("Bedrock error | status=%d | latency=%.2fs | body=%s",
+                     e.response.status_code, elapsed, e.response.text[:500])
+        raise
+    except Exception as e:
+        elapsed = time.monotonic() - start
+        logger.error("Bedrock error | latency=%.2fs | error=%s", elapsed, e)
+        raise
 
 
 def call_llm(
@@ -60,22 +100,24 @@ def call_llm(
     """
     for attempt in range(3):
         try:
-            response = _client.chat.completions.create(
-                model=_model,
-                max_tokens=max_tokens,
-                messages=[
-                    {"role": "system", "content": system},
-                    {"role": "user",   "content": user},
-                ],
-                temperature=0.1,   # low temperature for consistent structured output
-            )
-            text = response.choices[0].message.content.strip()
+            if _PROVIDER == "bedrock":
+                text = _call_bedrock(system, user, max_tokens)
+            else:
+                client = _make_openai_client()
+                response = client.chat.completions.create(
+                    model=_model,
+                    max_tokens=max_tokens,
+                    messages=[
+                        {"role": "system", "content": system},
+                        {"role": "user",   "content": user},
+                    ],
+                    temperature=0.1,
+                )
+                text = response.choices[0].message.content.strip()
 
             if expect_json:
-                # Strip markdown code fences if the model wraps JSON in them
                 if "```" in text:
                     parts = text.split("```")
-                    # Find the JSON block: it's between the first and second fence
                     for part in parts:
                         cleaned = part.strip()
                         if cleaned.startswith("json"):
@@ -108,17 +150,27 @@ def get_autogen_llm_config() -> dict:
     Returns an AutoGen-compatible llm_config dict.
     Used by pipeline.py to configure AssistantAgents.
     """
+    if _PROVIDER == "bedrock":
+        region = os.getenv("AWS_REGION", "us-east-1")
+        return {
+            "config_list": [
+                {
+                    "model": _model,
+                    "base_url": f"https://bedrock-runtime.{region}.amazonaws.com",
+                    "api_key": os.getenv("AWS_BEARER_TOKEN_BEDROCK", ""),
+                    "api_type": "openai",
+                }
+            ],
+            "temperature": 0.1,
+            "timeout": 120,
+        }
     return {
         "config_list": [
             {
                 "model": _model,
-                "base_url": (
-                    os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
-                    if _PROVIDER == "ollama"
-                    else f"https://bedrock-runtime.{os.getenv('AWS_REGION', 'ap-south-1')}.amazonaws.com/model"
-                ),
-                "api_key": "ollama" if _PROVIDER == "ollama" else os.getenv("AWS_ACCESS_KEY_ID", ""),
-                "api_type": "openai",  # AutoGen treats both as OpenAI-compatible
+                "base_url": os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
+                "api_key": "ollama",
+                "api_type": "openai",
             }
         ],
         "temperature": 0.1,
