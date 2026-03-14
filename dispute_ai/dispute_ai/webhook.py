@@ -230,12 +230,16 @@ _DASHBOARD_HTML = """<!DOCTYPE html>
     async function load() {
       try {
         const r = await fetch('/api/disputes');
-        disputes = await r.json();
+        const body = await r.json();
+        if (!r.ok) {
+          throw new Error(body.detail || r.statusText);
+        }
+        disputes = body;
         renderSummary();
         renderTable();
-      } catch {
+      } catch(e) {
         document.getElementById('tbody').innerHTML =
-          '<tr><td colspan="9" class="px-4 py-10 text-center text-red-500">Failed to load data</td></tr>';
+          `<tr><td colspan="9" class="px-4 py-10 text-center text-red-500">Failed to load data: ${e.message}</td></tr>`;
       }
     }
 
