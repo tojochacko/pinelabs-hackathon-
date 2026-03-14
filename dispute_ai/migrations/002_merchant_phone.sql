@@ -1,0 +1,1 @@
+ALTER TABLE disputes ADD COLUMN IF NOT EXISTS merchant_phone TEXT;

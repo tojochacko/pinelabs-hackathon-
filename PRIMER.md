@@ -25,21 +25,36 @@ Evolved the project into a webhook-driven service:
 - `pyproject.toml` — added fastapi, uvicorn[standard], supabase, httpx; added `dispute-ai-webhook` script entry
 - `.env.example` — added Pine Labs and Supabase env vars
 
+### Session 3 — Dashboard + WhatsApp notifications
+
+**New files:**
+- `dispute_ai/notifier.py` — WhatsApp notifications via CallMeBot (free forever). `notify_strategy_decision(state)` sends decision details to merchant after StrategyAgent runs.
+- `dispute_ai/migrations/002_merchant_phone.sql` — adds `merchant_phone TEXT` column to `disputes` table
+
+**Modified files:**
+- `state.py` — added `merchant_phone`, `merchant_whatsapp_key` fields
+- `db.py` — `upsert_dispute` now stores `merchant_phone`; added `get_disputes(decision=None)` for dashboard API
+- `webhook.py` — added `merchant_phone`/`merchant_whatsapp_key` to `DisputePayload`; calls `_try_notify(state)` after StrategyAgent in `on_step`; added `GET /dashboard` (HTML) and `GET /api/disputes` (JSON) endpoints
+- `.env.example` — added `CALLMEBOT_API_KEY` with setup instructions
+
 ## Current state
-All imports verified clean. Mock Pine Labs client returns correct data. CLI path unchanged.
-Supabase calls will gracefully skip (logged as warnings) if `SUPABASE_URL`/`SUPABASE_KEY` not set.
+Full webhook + dashboard + notifications. Supabase is the single source of truth for the dashboard. WhatsApp notifications are per-merchant (each merchant has their own CallMeBot API key tied to their phone number).
 
 ## Next steps
-1. `cp dispute_ai/.env.example dispute_ai/.env` and fill in secrets (or leave `PINE_LABS_MOCK=true`)
-2. `cd dispute_ai && uv sync`
-3. Start Ollama: `ollama serve`
-4. Start FastAPI: `uvicorn dispute_ai.webhook:app --reload --port 8000`
-5. Simulate a dispute:
+1. Run `dispute_ai/migrations/002_merchant_phone.sql` in Supabase dashboard
+2. Set `CALLMEBOT_API_KEY` in `.env` (fallback for single-merchant setups)
+3. Access dashboard at `http://localhost:8000/dashboard` after starting the server
+4. Simulate a dispute with merchant phone for WhatsApp notification:
    ```bash
    curl -X POST http://localhost:8000/simulate/dispute \
      -H "Content-Type: application/json" \
-     -d '{"order_id":"TXN-UL-8821993","merchant_id":"MERCH-URBAN-LADDER","amount":4500,"currency":"INR","reason":"Customer claims item was never delivered.","chargeback_code":"RBI-CB-4855","customer_name":"Priya Mehta"}'
+     -d '{"order_id":"TXN-UL-8821993","merchant_id":"MERCH-URBAN-LADDER","amount":4500,"currency":"INR","reason":"Customer claims item was never delivered.","chargeback_code":"RBI-CB-4855","customer_name":"Priya Mehta","merchant_phone":"+919876543210","merchant_whatsapp_key":"YOUR_CALLMEBOT_KEY"}'
    ```
-6. Run SQL migration in Supabase dashboard: `dispute_ai/migrations/001_initial.sql`
-7. Set `SUPABASE_URL` and `SUPABASE_KEY` to enable DB persistence
-8. Test signed webhook with `POST /webhook/pine-labs` + `X-Pine-Signature` header
+5. **CallMeBot merchant activation:** Each merchant adds `+34 644 60 20 96` on WhatsApp and sends "I allow callmebot to send me messages" — they receive their personal API key
+
+**API:**
+- `GET /dashboard` — merchant dashboard UI
+- `GET /api/disputes` — all disputes (JSON)
+- `GET /api/disputes?decision=FIGHT` — filter by FIGHT or ACCEPT
+- `POST /simulate/dispute` — trigger pipeline
+- `POST /webhook/pine-labs` — signed webhook from Pine Labs

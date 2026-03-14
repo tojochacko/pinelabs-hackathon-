@@ -48,3 +48,7 @@ class CaseState:
     # ── STRATEGY (extended) ───────────────────────────────────────────────────
     win_probability: int = 0    # 0-100, from LLM
     pipeline_decision: str = "" # FIGHT | ACCEPT
+
+    # ── MERCHANT CONTACT ─────────────────────────────────────────────────────
+    merchant_phone: str = ""           # E.164 format, e.g. +919876543210
+    merchant_whatsapp_key: str = ""    # CallMeBot API key (not stored in DB)

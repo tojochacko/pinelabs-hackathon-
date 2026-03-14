@@ -29,8 +29,17 @@ def upsert_dispute(state) -> None:
         "urgency_level": state.urgency_level,
         "days_remaining": state.days_remaining,
         "filing_deadline": state.filing_deadline,
+        "merchant_phone": getattr(state, "merchant_phone", ""),
         "status": "completed",
     }).execute()
+
+
+def get_disputes(decision: str = None) -> list:
+    client = get_client()
+    q = client.table("disputes").select("*")
+    if decision:
+        q = q.eq("pipeline_decision", decision)
+    return q.order("created_at", desc=True).execute().data
 
 
 def log_event(case_id: str, event: str, payload: dict) -> None:
