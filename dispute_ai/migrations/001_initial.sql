@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS audit_events;
+DROP TABLE IF EXISTS disputes;
+
 CREATE TABLE disputes (
     case_id TEXT PRIMARY KEY,
     order_id TEXT,
