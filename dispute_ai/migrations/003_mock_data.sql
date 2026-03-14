@@ -1,5 +1,5 @@
 INSERT INTO disputes (
-    case_id, order_id, merchant_id, transaction_id,
+    case_id, order_id, merchant_id,
     dispute_amount, currency, dispute_type,
     argument_strength, win_probability, pipeline_decision,
     recommendation, dispute_letter, urgency_level,
@@ -8,7 +8,7 @@ INSERT INTO disputes (
 ) VALUES
 
 -- FIGHT cases
-('CASE-TXN-UL-8821993-A1B2C3', 'TXN-UL-8821993', 'MERCH-URBAN-LADDER', 'TXN-UL-8821993',
+('CASE-TXN-UL-8821993-A1B2C3', 'TXN-UL-8821993', 'MERCH-URBAN-LADDER',
  4500.00, 'INR', 'non_delivery',
  'strong', 82, 'FIGHT',
  'file_dispute',
@@ -16,7 +16,7 @@ INSERT INTO disputes (
  'URGENT', 17, '2026-03-31', '+919876543210', 'completed',
  NOW() - INTERVAL '2 days', NOW() - INTERVAL '2 days'),
 
-('CASE-TXN-UL-9934421-D4E5F6', 'TXN-UL-9934421', 'MERCH-URBAN-LADDER', 'TXN-UL-9934421',
+('CASE-TXN-UL-9934421-D4E5F6', 'TXN-UL-9934421', 'MERCH-URBAN-LADDER',
  8200.00, 'INR', 'unauthorized_transaction',
  'strong', 75, 'FIGHT',
  'file_dispute',
@@ -24,7 +24,7 @@ INSERT INTO disputes (
  'URGENT', 2, '2026-03-16', '+919876543210', 'completed',
  NOW() - INTERVAL '5 days', NOW() - INTERVAL '5 days'),
 
-('CASE-TXN-DELL-5523441-G7H8I9', 'TXN-DELL-5523441', 'MERCH-DELL-INDIA', 'TXN-DELL-5523441',
+('CASE-TXN-DELL-5523441-G7H8I9', 'TXN-DELL-5523441', 'MERCH-DELL-INDIA',
  78500.00, 'INR', 'unauthorized_transaction',
  'strong', 79, 'FIGHT',
  'file_dispute',
@@ -32,7 +32,7 @@ INSERT INTO disputes (
  'NORMAL', 37, '2026-04-20', NULL, 'completed',
  NOW() - INTERVAL '1 day', NOW() - INTERVAL '1 day'),
 
-('CASE-TXN-AMZ-9912034-J1K2L3', 'TXN-AMZ-9912034', 'MERCH-AMAZON-IN', 'TXN-AMZ-9912034',
+('CASE-TXN-AMZ-9912034-J1K2L3', 'TXN-AMZ-9912034', 'MERCH-AMAZON-IN',
  14999.00, 'INR', 'non_delivery',
  'strong', 88, 'FIGHT',
  'file_dispute',
@@ -40,7 +40,7 @@ INSERT INTO disputes (
  'NORMAL', 22, '2026-04-05', NULL, 'completed',
  NOW() - INTERVAL '3 days', NOW() - INTERVAL '3 days'),
 
-('CASE-TXN-CRM-8834561-M4N5O6', 'TXN-CRM-8834561', 'MERCH-CROMA', 'TXN-CRM-8834561',
+('CASE-TXN-CRM-8834561-M4N5O6', 'TXN-CRM-8834561', 'MERCH-CROMA',
  55000.00, 'INR', 'non_delivery',
  'moderate', 61, 'FIGHT',
  'file_dispute',
@@ -49,7 +49,7 @@ INSERT INTO disputes (
  NOW() - INTERVAL '4 hours', NOW() - INTERVAL '4 hours'),
 
 -- ACCEPT cases
-('CASE-TXN-UL-7712088-P7Q8R9', 'TXN-UL-7712088', 'MERCH-URBAN-LADDER', 'TXN-UL-7712088',
+('CASE-TXN-UL-7712088-P7Q8R9', 'TXN-UL-7712088', 'MERCH-URBAN-LADDER',
  3100.00, 'INR', 'item_not_as_described',
  'weak', 22, 'ACCEPT',
  'settle_with_customer',
@@ -57,7 +57,7 @@ INSERT INTO disputes (
  'CRITICAL', 0, '2026-03-14', '+919876543210', 'completed',
  NOW() - INTERVAL '6 days', NOW() - INTERVAL '6 days'),
 
-('CASE-TXN-ZP-6670123-S1T2U3', 'TXN-ZP-6670123', 'MERCH-ZOMATO-PRO', 'TXN-ZP-6670123',
+('CASE-TXN-ZP-6670123-S1T2U3', 'TXN-ZP-6670123', 'MERCH-ZOMATO-PRO',
  999.00, 'INR', 'subscription_cancellation',
  'weak', 18, 'ACCEPT',
  'settle_with_customer',
@@ -65,7 +65,7 @@ INSERT INTO disputes (
  'CRITICAL', -6, '2026-03-08', NULL, 'completed',
  NOW() - INTERVAL '8 days', NOW() - INTERVAL '8 days'),
 
-('CASE-TXN-MMT-7745009-V4W5X6', 'TXN-MMT-7745009', 'MERCH-MAKEMYTRIP', 'TXN-MMT-7745009',
+('CASE-TXN-MMT-7745009-V4W5X6', 'TXN-MMT-7745009', 'MERCH-MAKEMYTRIP',
  23400.00, 'INR', 'services_not_rendered',
  'weak', 15, 'ACCEPT',
  'settle_with_customer',
@@ -73,7 +73,7 @@ INSERT INTO disputes (
  'CRITICAL', -4, '2026-03-10', NULL, 'completed',
  NOW() - INTERVAL '10 days', NOW() - INTERVAL '10 days'),
 
-('CASE-TXN-LK-4480112-Y7Z8A9', 'TXN-LK-4480112', 'MERCH-LENSKART', 'TXN-LK-4480112',
+('CASE-TXN-LK-4480112-Y7Z8A9', 'TXN-LK-4480112', 'MERCH-LENSKART',
  6500.00, 'INR', 'item_not_as_described',
  'weak', 30, 'ACCEPT',
  'settle_with_customer',
@@ -81,7 +81,7 @@ INSERT INTO disputes (
  'NORMAL', 42, '2026-04-25', NULL, 'completed',
  NOW() - INTERVAL '12 hours', NOW() - INTERVAL '12 hours'),
 
-('CASE-TXN-SWG-2298341-B1C2D3', 'TXN-SWG-2298341', 'MERCH-SWIGGY-INSTAMART', 'TXN-SWG-2298341',
+('CASE-TXN-SWG-2298341-B1C2D3', 'TXN-SWG-2298341', 'MERCH-SWIGGY-INSTAMART',
  1840.00, 'INR', 'partial_delivery',
  'weak', 25, 'ACCEPT',
  'settle_with_customer',
@@ -90,7 +90,7 @@ INSERT INTO disputes (
  NOW() - INTERVAL '1 day', NOW() - INTERVAL '1 day'),
 
 -- Mixed/edge cases
-('CASE-TXN-MYN-3341892-E4F5G6', 'TXN-MYN-3341892', 'MERCH-MYNTRA', 'TXN-MYN-3341892',
+('CASE-TXN-MYN-3341892-E4F5G6', 'TXN-MYN-3341892', 'MERCH-MYNTRA',
  2799.00, 'INR', 'duplicate_charge',
  'moderate', 55, 'FIGHT',
  'file_dispute',
@@ -98,7 +98,7 @@ INSERT INTO disputes (
  'NORMAL', 27, '2026-04-10', NULL, 'completed',
  NOW() - INTERVAL '2 hours', NOW() - INTERVAL '2 hours'),
 
-('CASE-TXN-BOAT-6601234-H7I8J9', 'TXN-BOAT-6601234', 'MERCH-BOAT-LIFESTYLE', 'TXN-BOAT-6601234',
+('CASE-TXN-BOAT-6601234-H7I8J9', 'TXN-BOAT-6601234', 'MERCH-BOAT-LIFESTYLE',
  3299.00, 'INR', 'item_not_as_described',
  'moderate', 42, 'ACCEPT',
  'settle_with_customer',
@@ -106,7 +106,7 @@ INSERT INTO disputes (
  'NORMAL', 25, '2026-04-08', NULL, 'completed',
  NOW() - INTERVAL '3 hours', NOW() - INTERVAL '3 hours'),
 
-('CASE-TXN-CT-3312908-K1L2M3', 'TXN-CT-3312908', 'MERCH-CLEARTRIP', 'TXN-CT-3312908',
+('CASE-TXN-CT-3312908-K1L2M3', 'TXN-CT-3312908', 'MERCH-CLEARTRIP',
  18750.00, 'INR', 'services_not_rendered',
  'weak', 20, 'ACCEPT',
  'settle_with_customer',
