@@ -33,7 +33,7 @@ All output is rendered in a structured Rich terminal UI, and the dispute letter 
 | Language | Python 3.11+ |
 | AI Orchestration | Microsoft AutoGen (`autogen-agentchat`, `autogen-core`, `autogen-ext[openai]`) |
 | LLM (local dev) | `gemma3` via Ollama (OpenAI-compatible endpoint) |
-| LLM (production) | Amazon Bedrock (`claude-3-5-sonnet`) |
+| LLM (production) | Amazon Bedrock (`claude-sonnet-4-6`) |
 | Terminal UI | `rich` |
 | Package Manager | `uv` |
 | Container | Docker + Docker Compose |
@@ -130,5 +130,5 @@ LLM_PROVIDER=bedrock
 AWS_ACCESS_KEY_ID=your_key
 AWS_SECRET_ACCESS_KEY=your_secret
 AWS_REGION=ap-south-1
-BEDROCK_MODEL_ID=anthropic.claude-3-5-sonnet-20241022-v2:0
+BEDROCK_MODEL=arn:aws:bedrock:us-east-1:YOUR_ACCOUNT_ID:inference-profile/us.anthropic.claude-sonnet-4-6
 ```
