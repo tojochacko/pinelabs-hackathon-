@@ -1,8 +1,11 @@
+import base64
 import hashlib
 import hmac
+import json
 import os
 import uuid
 from datetime import datetime
+from typing import List, Optional
 
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
@@ -21,7 +24,39 @@ app = FastAPI(title="DisputeAI Webhook Service")
 console = Console()
 
 _WEBHOOK_SECRET = os.getenv("PINE_LABS_WEBHOOK_SECRET", "")
+_REFUND_EVENTS = {"REFUND_PROCESSED", "REFUND_FAILED", "REFUND_INITIATED"}
 
+
+# ── Pine Labs webhook payload models ──────────────────────────────────────────
+
+class _Amount(BaseModel):
+    value: int = 0       # Pine Labs sends amounts in paise (1 INR = 100 paise)
+    currency: str = "INR"
+
+
+class _RefundItem(BaseModel):
+    id: str = ""
+    merchant_refund_reference: str = ""
+    status: str = ""
+    refund_amount: Optional[_Amount] = None
+    reason: str = ""
+
+
+class _WebhookData(BaseModel):
+    order_id: str = ""
+    merchant_id: str = ""
+    merchant_order_reference: str = ""
+    status: str = ""
+    order_amount: Optional[_Amount] = None
+    refunds: List[_RefundItem] = []
+
+
+class PineLabsWebhookEvent(BaseModel):
+    event_type: str
+    data: _WebhookData
+
+
+# ── Internal dispute payload (used by simulate endpoint) ──────────────────────
 
 class DisputePayload(BaseModel):
     order_id: str = "TXN-UL-8821993"
@@ -35,24 +70,75 @@ class DisputePayload(BaseModel):
     merchant_whatsapp_key: str = ""  # CallMeBot API key for that phone
 
 
+def _verify_signature(raw_body: bytes, headers) -> None:
+    """Verify Pine Labs HMAC-SHA256 webhook signature.
+
+    Message = "{webhook-id}.{webhook-timestamp}.{raw_body}"
+    Key     = base64-decoded PINE_LABS_WEBHOOK_SECRET
+    Header  = "webhook-signature: v1,<base64(HMAC-SHA256)>"
+    """
+    webhook_id = headers.get("webhook-id", "")
+    webhook_timestamp = headers.get("webhook-timestamp", "")
+    signature_header = headers.get("webhook-signature", "")
+
+    message = f"{webhook_id}.{webhook_timestamp}.{raw_body.decode()}"
+    secret_bytes = base64.b64decode(_WEBHOOK_SECRET)
+    expected = base64.b64encode(
+        hmac.new(secret_bytes, message.encode(), hashlib.sha256).digest()
+    ).decode()
+
+    # Header format: "v1,<signature>"
+    provided = signature_header.split(",", 1)[-1] if "," in signature_header else signature_header
+    if not hmac.compare_digest(expected, provided):
+        raise HTTPException(status_code=401, detail="Invalid signature")
+
+
+def _map_event_to_payload(event: PineLabsWebhookEvent) -> DisputePayload:
+    """Map a Pine Labs refund webhook event to the internal DisputePayload."""
+    data = event.data
+    refund = data.refunds[0] if data.refunds else None
+
+    if refund and refund.refund_amount:
+        amount = refund.refund_amount.value / 100  # paise → rupees
+        currency = refund.refund_amount.currency
+        reason = refund.reason or f"Refund {event.event_type} on order {data.order_id}"
+    elif data.order_amount:
+        amount = data.order_amount.value / 100
+        currency = data.order_amount.currency
+        reason = f"Refund {event.event_type} on order {data.order_id}"
+    else:
+        amount = 0.0
+        currency = "INR"
+        reason = f"Refund {event.event_type} on order {data.order_id}"
+
+    return DisputePayload(
+        order_id=data.order_id or data.merchant_order_reference,
+        merchant_id=data.merchant_id,
+        amount=amount,
+        currency=currency,
+        reason=reason,
+        chargeback_code="",
+        customer_name="",
+        merchant_phone=os.getenv("MERCHANT_PHONE", ""),
+        merchant_whatsapp_key=os.getenv("MERCHANT_WHATSAPP_KEY", ""),
+    )
+
+
 @app.post("/webhook/pine-labs")
 async def pine_labs_webhook(request: Request, background_tasks: BackgroundTasks):
     raw_body = await request.body()
-    signature = request.headers.get("X-Pine-Signature", "")
 
     if _WEBHOOK_SECRET:
-        expected = hmac.new(
-            _WEBHOOK_SECRET.encode(),
-            raw_body,
-            hashlib.sha256,
-        ).hexdigest()
-        if not hmac.compare_digest(expected, signature):
-            raise HTTPException(status_code=401, detail="Invalid signature")
+        _verify_signature(raw_body, request.headers)
 
-    import json
-    payload = DisputePayload(**json.loads(raw_body))
+    event = PineLabsWebhookEvent(**json.loads(raw_body))
+
+    if event.event_type not in _REFUND_EVENTS:
+        return JSONResponse({"status": "ignored", "event_type": event.event_type})
+
+    payload = _map_event_to_payload(event)
     background_tasks.add_task(_run_pipeline_bg, payload)
-    return JSONResponse({"status": "accepted"})
+    return JSONResponse({"status": "accepted", "event_type": event.event_type})
 
 
 @app.post("/simulate/dispute")
